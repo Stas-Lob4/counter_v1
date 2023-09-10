@@ -1,4 +1,5 @@
 import React, {ChangeEvent, useState} from 'react';
+import s from "./Setting.module.css"
 import {Input} from './component/Input';
 import {Button} from './component/Button';
 import {Link} from 'react-router-dom';
@@ -52,9 +53,9 @@ export const Setting: React.FC<PropsType> = ({updateMaxValue, updateMinValue, mi
 
 
     return (
-        <div>
-            <div>
-                <div>
+        <div className={s.setting}>
+            <div className={s.setting_inputs_box}>
+                <div className={s.setting_value_box}>
                     <span>max value</span>
                     <Input
                         type={'number'}
@@ -63,7 +64,7 @@ export const Setting: React.FC<PropsType> = ({updateMaxValue, updateMinValue, mi
                         onWheel={handleMaxInputWheel}
                     />
                 </div>
-                <div>
+                <div className={s.setting_value_box}>
                     <span>min value</span>
                     <Input
                         type={'number'}

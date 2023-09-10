@@ -32,7 +32,7 @@ function App() {
 
     const resetCounter = () => {
         localStorage.clear()
-        setValue(minValue);
+        setValue(0);
     }
 
     return (
