@@ -2,7 +2,7 @@ import React from 'react';
 import s from './Counter.module.css';
 import {Input} from './component/Input';
 import {Button} from './component/Button';
-import { Link } from 'react-router-dom';
+import {Link, NavLink} from 'react-router-dom';
 
 type PropsType = {
     value: number
@@ -26,9 +26,9 @@ export const Counter:React.FC<PropsType> = ({incCounter, decCounter, resetCounte
             <Button className={s.btn_inc} disabled={incDisableBtn} callBack={incCounter} name={'+1'}/>
             <Button className={s.btn_rst} disabled={rstDisableBtn} callBack={resetCounter} name={'reset'}/>
             <Button className={s.btn_dec} disabled={decDisableBtn} callBack={decCounter} name={'-1'}/>
-            <Link to={'/setting'}>
+            <NavLink to={`/setting`}>
                 <Button className={s.btn_stn} callBack={()=>{}} name={'setting'}/>
-            </Link>
+            </NavLink>
         </div>
     </div>
 };

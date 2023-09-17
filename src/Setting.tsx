@@ -2,7 +2,7 @@ import React, {ChangeEvent, useState} from 'react';
 import s from './Setting.module.css'
 import {Input} from './component/Input';
 import {Button} from './component/Button';
-import {Link} from 'react-router-dom';
+import {Link, NavLink} from 'react-router-dom';
 
 
 type PropsType = {
@@ -74,9 +74,9 @@ export const Setting: React.FC<PropsType> = ({updateMaxValue, updateMinValue, mi
                     />
                 </div>
             </div>
-            <Link to={'/'}>
+            <NavLink to={'/'}>
                 <Button callBack={onClickBtnSettingHandler} name={'set'}/>
-            </Link>
+            </NavLink>
         </div>
     );
 };

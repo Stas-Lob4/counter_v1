@@ -44,7 +44,7 @@ function App() {
 
     return (
         <div className={s.App}>
-            <BrowserRouter>
+            <BrowserRouter >
                 <Routes>
                     <Route path={'/'}
                            element={
