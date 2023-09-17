@@ -1,8 +1,8 @@
-import React, {ChangeEvent, useState} from 'react';
+import React, {ChangeEvent, FocusEventHandler, useState} from 'react';
 import s from './Setting.module.css'
 import {Input} from './component/Input';
 import {Button} from './component/Button';
-import {Link} from 'react-router-dom';
+import {NavLink} from 'react-router-dom';
 
 
 type PropsType = {
@@ -10,45 +10,74 @@ type PropsType = {
     minValue: number
     updateMaxValue: (maxValue: number) => void
     updateMinValue: (minValue: number) => void
+    setError: (error: string) => void
+    error: string
 }
-export const Setting: React.FC<PropsType> = ({updateMaxValue, updateMinValue, minValue, maxValue}) => {
+export const Setting: React.FC<PropsType> = ({updateMaxValue, updateMinValue, minValue, maxValue, setError, error}) => {
 
     const [minNum, setMinNum] = useState(minValue);
     const [maxNum, setMaxNum] = useState(maxValue);
 
+    const [errorMinNum, setErrorMinNum] = useState(false);
+    const [errorMaxNum, setErrorMaxNum] = useState(false);
+
+
     const handleMinInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-        const newValue = parseInt(e.target.value, 10);
-        if (!isNaN(newValue)) {
+        const newValue = parseInt(e.currentTarget.value, 10);
+        if (newValue < 0) {
             setMinNum(newValue);
+            setError('Incorrect value!')
+            setErrorMinNum(true)
+        } else {
+            setMinNum(newValue);
+            setError('')
+            setErrorMinNum(false)
         }
     };
     const handleMaxInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-        const newValue = parseInt(e.target.value, 10);
-        if (!isNaN(newValue)) {
-            setMaxNum(newValue);
+        const newValue = parseInt(e.currentTarget.value, 10);
+        setMaxNum(newValue);
+        if (newValue < minNum && newValue < 0) {
+            setError('Incorrect value!')
+            setErrorMaxNum(true)
         }
+        setError('')
+        setErrorMaxNum(false)
     };
     const handleMinInputWheel = (e: React.WheelEvent<HTMLInputElement>) => {
         e.preventDefault();
         const newValue = minNum + (e.deltaY > 0 ? -1 : 1);
-        if (newValue >= minValue && newValue <= maxNum) {
-            setMinNum(newValue);
+        setMinNum(newValue);
+        if (newValue < 0) {
+            setError('Incorrect value!')
+            setErrorMinNum(true)
+        } else {
+            setError('')
+            setErrorMinNum(false)
         }
     };
-
     const handleMaxInputWheel = (e: React.WheelEvent<HTMLInputElement>) => {
         e.preventDefault();
         const newValue = maxNum + (e.deltaY > 0 ? -1 : 1);
-        if (newValue >= minNum && newValue <= maxValue) {
+        setMaxNum(newValue);
+        if (newValue < minNum && newValue < 0) {
             setMaxNum(newValue);
+            setError('Incorrect value!')
+            setErrorMaxNum(true)
+        } else {
+            setError('')
+            setErrorMaxNum(false)
         }
+
     };
-
-
     const onClickBtnSettingHandler = () => {
         updateMaxValue(maxNum);
         updateMinValue(minNum);
     }
+
+    let isErrorInputMinValue = isNaN(minNum) || maxNum <= minNum || minNum < 0
+    let isErrorInputMaxValue = minNum >= maxNum ||  isNaN(maxNum)
+    let isError = error !== '' || errorMaxNum || errorMinNum || minNum >= maxNum ||  isNaN(maxNum) || isNaN(minNum)
 
     return (
         <div className={s.setting}>
@@ -56,27 +85,29 @@ export const Setting: React.FC<PropsType> = ({updateMaxValue, updateMinValue, mi
                 <div className={s.setting_value_box}>
                     <span>max value</span>
                     <Input
+                        className={(isErrorInputMaxValue ? s.red : '')}
                         type={'number'}
                         value={maxNum}
-                        min={minValue ? minValue : 1}
                         onChange={handleMaxInputChange}
                         onWheel={handleMaxInputWheel}
+                        onBlur={handleMaxInputChange}
                     />
                 </div>
                 <div className={s.setting_value_box}>
                     <span>min value</span>
                     <Input
-                        max={maxValue}
+                        className={(isErrorInputMinValue ? s.red : '')}
                         type={'number'}
                         value={minNum}
                         onChange={handleMinInputChange}
                         onWheel={handleMinInputWheel}
+                        onBlur={handleMinInputChange}
                     />
                 </div>
             </div>
-            <Link to={'/'}>
-                <Button callBack={onClickBtnSettingHandler} name={'set'}/>
-            </Link>
+            <NavLink to={'/'}>
+                <Button disabled={isError} callBack={onClickBtnSettingHandler}>set</Button>
+            </NavLink>
         </div>
     );
 };

@@ -1,8 +1,7 @@
 import React from 'react';
 import s from './Counter.module.css';
-import {Input} from './component/Input';
 import {Button} from './component/Button';
-import { Link } from 'react-router-dom';
+import {NavLink} from 'react-router-dom';
 
 type PropsType = {
     value: number
@@ -13,7 +12,7 @@ type PropsType = {
     resetCounter: () => void
 }
 
-export const Counter:React.FC<PropsType> = ({incCounter, decCounter, resetCounter, value, maxValue, minValue}) => {
+export const Counter: React.FC<PropsType> = ({incCounter, decCounter, resetCounter, value, maxValue, minValue}) => {
 
     const incDisableBtn = value === maxValue;
     const decDisableBtn = value === minValue;
@@ -21,14 +20,14 @@ export const Counter:React.FC<PropsType> = ({incCounter, decCounter, resetCounte
 
 
     return <div className={s.counter}>
-        <p>{value}</p>
+        <p className={(value===maxValue ? s.red : '')}>{value}</p>
         <div className={s.button_box}>
-            <Button className={s.btn_inc} disabled={incDisableBtn} callBack={incCounter} name={'+1'}/>
-            <Button className={s.btn_rst} disabled={rstDisableBtn} callBack={resetCounter} name={'reset'}/>
-            <Button className={s.btn_dec} disabled={decDisableBtn} callBack={decCounter} name={'-1'}/>
-            <Link to={'/setting'}>
-                <Button className={s.btn_stn} callBack={()=>{}} name={'setting'}/>
-            </Link>
+            <Button className={s.btn_inc} disabled={incDisableBtn} callBack={incCounter}>+1</Button>
+            <Button className={s.btn_rst} disabled={rstDisableBtn} callBack={resetCounter}>reset</Button>
+            <Button className={s.btn_dec} disabled={decDisableBtn} callBack={decCounter}>-1</Button>
+            <NavLink to={`/setting`}>
+                <Button className={s.btn_stn}>setting</Button>
+            </NavLink>
         </div>
     </div>
 };

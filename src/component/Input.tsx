@@ -1,4 +1,4 @@
-import React, {ChangeEvent} from 'react';
+import React, {ChangeEvent, FocusEventHandler} from 'react';
 
 type PropsType = {
     value: number
@@ -7,8 +7,20 @@ type PropsType = {
     max?: number
     onChange?: (e: ChangeEvent<HTMLInputElement>) => void
     onWheel?: (e: React.WheelEvent<HTMLInputElement>) => void
+    onBlur?: (e: ChangeEvent<HTMLInputElement>) =>void
+    onKeyPress?: (e: any) => void;
+    className?: string
 }
 
-export const Input: React.FC<PropsType> = ({value, type,onChange, onWheel, min,max}) => {
-    return <input type={type} value={value} onChange={onChange} onWheel={onWheel} max={max ? max - 1 : undefined} min={min ? min  : 0}/>
+export const Input: React.FC<PropsType> = ({value, type,onChange, onWheel, min,max, onBlur, className}) => {
+    return <input
+                type={type}
+                value={value}
+                onChange={onChange}
+                onBlur={onBlur}
+                onWheel={onWheel}
+                max={max}
+                min={min}
+                className={className}
+    />
 };
