@@ -58,7 +58,7 @@ export const Setting: React.FC<PropsType> = ({updateMaxValue, updateMinValue, mi
                     <Input
                         type={'number'}
                         value={maxNum}
-                        min={minValue}
+                        min={minValue ? minValue : 1}
                         onChange={handleMaxInputChange}
                         onWheel={handleMaxInputWheel}
                     />
