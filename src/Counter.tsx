@@ -17,7 +17,7 @@ export const Counter:React.FC<PropsType> = ({incCounter, decCounter, resetCounte
 
     const incDisableBtn = value === maxValue;
     const decDisableBtn = value === minValue;
-    const rstDisableBtn = value === 0;
+    const rstDisableBtn = value === minValue;
 
 
     return <div className={s.counter}>

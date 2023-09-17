@@ -19,6 +19,10 @@ function App() {
     const [value, setValue] = useState(initValue);
 
     useEffect(() => {
+        setValue(minValue)
+    }, [minValue, maxValue]);
+
+    useEffect(() => {
         localStorage.setItem('counterValue', JSON.stringify(value))
     }, [value]);
     useEffect(() => {
