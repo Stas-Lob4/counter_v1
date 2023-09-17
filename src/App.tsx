@@ -8,10 +8,13 @@ import {Setting} from './Setting';
 function App() {
 
     let valueAsString = localStorage.getItem('counterValue')
+    let valueMinValue = localStorage.getItem('minCounterValue')
+    let valueMaxValue = localStorage.getItem('maxCounterValue')
+
     const initMaxValue = 5;
 
-    const [minValue, setMinValue] = useState(0);
-    const [maxValue, setMaxValue] = useState(initMaxValue);
+    const [minValue, setMinValue] = useState(valueMinValue ?  JSON.parse(valueMinValue) : 0);
+    const [maxValue, setMaxValue] = useState(valueMaxValue ?  JSON.parse(valueMaxValue) : initMaxValue);
     const initValue = () => valueAsString ? JSON.parse(valueAsString) : minValue
     const [value, setValue] = useState(initValue);
 
@@ -27,12 +30,12 @@ function App() {
 
     const incCounter = () => setValue(value + 1);
     const decCounter = () => setValue(value - 1)
-    const updateMaxValue = (maxValue: number) => setMaxValue(maxValue)
-    const updateMinValue = (minValue: number) => setMinValue(minValue)
+    const updateMaxValue = (maxCount: number) => setMaxValue(maxCount)
+    const updateMinValue = (minCount: number) => setMinValue(minCount)
 
     const resetCounter = () => {
         localStorage.clear()
-        setValue(0);
+        setValue(minValue);
     }
 
     return (
