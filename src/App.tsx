@@ -18,8 +18,6 @@ function App() {
     const [counter, setCounter] = useState<number>(initValue);
 
 
-    const [error, setError] = useState('')
-
     const incCounter = () => {
         const newValue = counter + 1
         saveLocalStorageData('counterValue', newValue)
@@ -46,7 +44,7 @@ function App() {
 
     return (
         <div className={s.App}>
-            <BrowserRouter>
+            <BrowserRouter >
                 <Routes>
                     <Route path = {'/'}
                            element = {
@@ -67,8 +65,6 @@ function App() {
                                    minValue={minValue}
                                    updateMaxValue={updateMaxValue}
                                    updateMinValue={updateMinValue}
-                                   setError={setError}
-                                   error={error}
                                />
                            }
                     />
