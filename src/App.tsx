@@ -1,57 +1,62 @@
-import React, {useEffect, useState} from 'react';
+import React, {useReducer, useState} from 'react';
 import s from './App..module.css';
 import {Counter} from './Counter';
-import {BrowserRouter, Route, Routes} from 'react-router-dom';
+import {HashRouter, Route, Routes} from 'react-router-dom';
 import {Setting} from './Setting';
-import {initMaxValue, initMinValue, saveLocalStorageData} from './data/data_init';
+import {initMaxValue, initMinValue} from './data/data_init';
+import {setCounterValueAC, setMaxValueAC, setMinValueAC} from './reducers/counter_reducer';
+import {useDispatch, useSelector} from 'react-redux';
+import {RootState} from './store/store';
 
 function App() {
 
-    let valueAsString = localStorage.getItem('counterValue')
-    let valueMinValue = localStorage.getItem('minCounterValue')
-    let valueMaxValue = localStorage.getItem('maxCounterValue')
+    // let valueAsString = localStorage.getItem('counterValue')
+    // let valueMinValue = localStorage.getItem('minCounterValue')
+    // let valueMaxValue = localStorage.getItem('maxCounterValue')
 
 
-    const [minValue, setMinValue] = useState(valueMinValue ?  +valueMinValue : initMinValue);
-    const [maxValue, setMaxValue] = useState(valueMaxValue ?  +valueMaxValue : initMaxValue);
-    const initValue = () => valueAsString ? JSON.parse(valueAsString) : minValue
-    const [counter, setCounter] = useState<number>(initValue);
+    const dispatch = useDispatch()
+
+    const counterValue = useSelector<RootState, number>(state => state.counter.counterValue)
+    const minValue = useSelector<RootState, number>(state => state.counter.minValue)
+    const maxValue = useSelector<RootState, number>(state => state.counter.maxValue)
+
 
 
     const incCounter = () => {
-        const newValue = counter + 1
-        saveLocalStorageData('counterValue', newValue)
-        setCounter(newValue)
+        const newValue = counterValue + 1
+        // saveLocalStorageData('counterValue', newValue)
+        dispatch(setCounterValueAC(newValue))
     };
     const decCounter = () => {
-        const newValue = counter - 1
-        saveLocalStorageData('counterValue', newValue)
-        setCounter(newValue)
+        const newValue = counterValue - 1
+        //saveLocalStorageData('counterValue', newValue)
+        dispatch(setCounterValueAC(newValue))
     }
-    const updateMaxValue = (maxCount: number) => {
-        saveLocalStorageData('maxCounterValue', maxCount)
-        setMaxValue(maxCount)
+    const updateMaxValue = (maxValue: number) => {
+        //saveLocalStorageData('maxCounterValue', maxCount)
+        dispatch(setMaxValueAC(maxValue))
     }
-    const updateMinValue = (minCount: number) => {
-        saveLocalStorageData('minCounterValue', minCount)
-        setMinValue(minCount)
-        setCounter(minCount)
+    const updateMinValue = (minValue: number) => {
+        //saveLocalStorageData('minCounterValue', minCount)
+        dispatch(setMinValueAC(minValue))
+        resetCounter(minValue)
     }
-    const resetCounter = () => {
-        localStorage.clear()
-        setCounter(minValue);
+    const resetCounter = (minValue: number) => {
+        //localStorage.clear()
+        dispatch(setCounterValueAC(minValue))
     }
 
     return (
         <div className={s.App}>
-            <BrowserRouter >
+            <HashRouter>
                 <Routes>
                     <Route path = {'/'}
                            element = {
                                <Counter
-                                   value={counter}
-                                   maxValue={maxValue}
+                                   counterValue={counterValue}
                                    minValue={minValue}
+                                   maxValue={maxValue}
                                    incCounter={incCounter}
                                    decCounter={decCounter}
                                    resetCounter={resetCounter}
@@ -69,7 +74,7 @@ function App() {
                            }
                     />
                 </Routes>
-            </BrowserRouter>
+            </HashRouter>
         </div>
     );
 }

@@ -1,8 +1,9 @@
-import React, {ChangeEvent, useState} from 'react';
+import React, {ChangeEvent, useReducer, useState} from 'react';
 import s from './Setting.module.css'
 import {Input} from './component/Input';
 import {Button} from './component/Button';
 import {Link} from 'react-router-dom';
+import {state} from './data/data_init';
 
 
 type PropsType = {
@@ -12,46 +13,30 @@ type PropsType = {
     updateMinValue: (minValue: number) => void
 }
 export const Setting: React.FC<PropsType> = ({updateMaxValue, updateMinValue, minValue, maxValue}) => {
-
-    const [minNum, setMinNum] = useState(minValue);
-    const [maxNum, setMaxNum] = useState(maxValue);
+    const [minCount, setMinCount] = useState(minValue)
+    const [maxCount, setMaxCount] = useState(maxValue)
 
     const handleMinInputChange = (e: ChangeEvent<HTMLInputElement>) => {
         const newValue = parseInt(e.target.value, 10);
         if (!isNaN(newValue)) {
-            setMinNum(newValue);
+            setMinCount(newValue);
         }
     };
     const handleMaxInputChange = (e: ChangeEvent<HTMLInputElement>) => {
         const newValue = parseInt(e.target.value, 10);
         if (!isNaN(newValue)) {
-            setMaxNum(newValue);
-        }
-    };
-    const handleMinInputWheel = (e: React.WheelEvent<HTMLInputElement>) => {
-        e.preventDefault();
-        const newValue = minNum + (e.deltaY > 0 ? -1 : 1);
-        if (newValue >= minValue && newValue <= maxNum) {
-            setMinNum(newValue);
+            setMaxCount(newValue);
         }
     };
 
-    const handleMaxInputWheel = (e: React.WheelEvent<HTMLInputElement>) => {
-        e.preventDefault();
-        const newValue = maxNum + (e.deltaY > 0 ? -1 : 1);
-        if (newValue >= minNum && newValue <= maxValue) {
-            setMaxNum(newValue);
-        }
-    };
-
-
-    const onClickBtnSettingHandler = () => {
-        updateMaxValue(maxNum);
-        updateMinValue(minNum);
+    const setNewValueSetting = () => {
+        updateMaxValue(maxCount)
+        updateMinValue(minCount)
     }
 
-    let isErrorInputMinValue = isNaN(minNum) || maxNum <= minNum || minNum < 0
-    let isErrorInputMaxValue = minNum >= maxNum || isNaN(maxNum) || maxNum <= 0
+
+    let isErrorInputMinValue = isNaN(minCount) || maxCount <= minCount || minCount < 0
+    let isErrorInputMaxValue = minCount >= maxCount || isNaN(maxCount) || maxCount <= 0
     let isError = isErrorInputMinValue || isErrorInputMaxValue
 
     return (
@@ -62,10 +47,9 @@ export const Setting: React.FC<PropsType> = ({updateMaxValue, updateMinValue, mi
                     <Input
                         className={(isErrorInputMaxValue ? s.red : '')}
                         type={'number'}
-                        value={maxNum}
+                        value={maxCount}
                         onChange={handleMaxInputChange}
-                        onWheel={handleMaxInputWheel}
-                        onBlur={handleMinInputChange}
+                        onBlur={handleMaxInputChange}
                     />
                 </div>
                 <div className={s.setting_value_box}>
@@ -73,15 +57,14 @@ export const Setting: React.FC<PropsType> = ({updateMaxValue, updateMinValue, mi
                     <Input
                         className={(isErrorInputMinValue ? s.red : '')}
                         type={'number'}
-                        value={minNum}
+                        value={minCount}
                         onChange={handleMinInputChange}
-                        onWheel={handleMinInputWheel}
                         onBlur={handleMinInputChange}
                     />
                 </div>
             </div>
             <Link to={'/'}>
-                <Button disabled={isError} callBack={onClickBtnSettingHandler}>SET</Button>
+                <Button disabled={isError} callBack={setNewValueSetting}>SET</Button>
             </Link>
         </div>
     );
