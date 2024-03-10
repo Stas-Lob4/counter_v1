@@ -3,20 +3,35 @@ import s from './Setting.module.css'
 import {Input} from './component/Input';
 import {Button} from './component/Button';
 import {Link} from 'react-router-dom';
-import {state} from './data/data_init';
+import {useDispatch, useSelector} from 'react-redux';
+import {RootState} from './store/store';
+import {setCounterValueAC, setMaxValueAC, setMinValueAC} from './reducers/counter.reducer';
 
 
 type PropsType = {
-    maxValue: number
-    minValue: number
-    updateMaxValue: (maxValue: number) => void
-    updateMinValue: (minValue: number) => void
+    updateMode: () => void
 }
-export const Setting: React.FC<PropsType> = ({updateMaxValue, updateMinValue, minValue, maxValue}) => {
+export const Setting: React.FC<PropsType> = ({updateMode}) => {
+
+    const dispatch = useDispatch()
+
+    const minValue = useSelector<RootState, number>(state => state.counter.minValue)
+    const maxValue = useSelector<RootState, number>(state => state.counter.maxValue)
+
     const [minCount, setMinCount] = useState(minValue)
     const [maxCount, setMaxCount] = useState(maxValue)
+    const updateMaxValue = (maxValue: number) => {
+        //saveLocalStorageData('maxCounterValue', maxCount)
+        dispatch(setMaxValueAC(maxValue))
+    }
+    const updateMinValue = (minValue: number) => {
+        //saveLocalStorageData('minCounterValue', minCount)
+        dispatch(setMinValueAC(minValue))
+        dispatch(setCounterValueAC(minValue))
+    }
 
-    const handleMinInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+
+        const handleMinInputChange = (e: ChangeEvent<HTMLInputElement>) => {
         const newValue = parseInt(e.target.value, 10);
         if (!isNaN(newValue)) {
             setMinCount(newValue);
@@ -32,6 +47,7 @@ export const Setting: React.FC<PropsType> = ({updateMaxValue, updateMinValue, mi
     const setNewValueSetting = () => {
         updateMaxValue(maxCount)
         updateMinValue(minCount)
+        updateMode()
     }
 
 
@@ -63,9 +79,7 @@ export const Setting: React.FC<PropsType> = ({updateMaxValue, updateMinValue, mi
                     />
                 </div>
             </div>
-            <Link to={'/'}>
-                <Button disabled={isError} callBack={setNewValueSetting}>SET</Button>
-            </Link>
+            <Button disabled={isError} onClick={setNewValueSetting} >SET</Button>
         </div>
     );
 };

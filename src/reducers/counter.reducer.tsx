@@ -3,14 +3,14 @@ export type InitialStateType = {
     minValue: number
     counterValue: number
 }
-
-const initialState: InitialStateType = {
+export const initState = {
     maxValue: 5,
     minValue: 0,
     counterValue: 0
 }
-export const counterReducer = (state = initialState, action: ActionType) => {
-    switch (action.type){
+
+export const counterReducer = (state = initState, action: ActionType) => {
+    switch (action.type) {
         case 'SET-MAX-VALUE':
             return {...state, maxValue: action.payload.newValue}
         case 'SET-MIN-VALUE':
@@ -27,7 +27,7 @@ type ActionType = SetMaxValueType | SetMinValueType | SetCounterValueType
 type SetMaxValueType = ReturnType<typeof setMaxValueAC>
 export const setMaxValueAC = (newValue: number) => {
     return {
-        type: "SET-MAX-VALUE",
+        type: 'SET-MAX-VALUE',
         payload: {newValue}
     } as const
 }
@@ -35,7 +35,7 @@ export const setMaxValueAC = (newValue: number) => {
 type SetMinValueType = ReturnType<typeof setMinValueAC>
 export const setMinValueAC = (newValue: number) => {
     return {
-        type: "SET-MIN-VALUE",
+        type: 'SET-MIN-VALUE',
         payload: {newValue}
     } as const
 }
@@ -43,7 +43,7 @@ export const setMinValueAC = (newValue: number) => {
 type SetCounterValueType = ReturnType<typeof setCounterValueAC>
 export const setCounterValueAC = (newValue: number) => {
     return {
-        type: "SET-COUNTER-VALUE",
+        type: 'SET-COUNTER-VALUE',
         payload: {newValue}
     } as const
 }
